@@ -6,13 +6,13 @@ on:
   workflow_dispatch:
     inputs:
       issue_title:
-        description: 'Issue title to use for the chess move'
+        description: "Issue title to use for the chess move"
         required: false
-        default: 'Chess: manual run'
+        default: "Chess: manual run"
       issue_author:
-        description: 'Author name to use for the generated commit'
+        description: "Author name to use for the generated commit"
         required: false
-        default: '${{ github.actor }}'
+        default: "manual-run"
 
 jobs:
   move:
@@ -40,8 +40,8 @@ jobs:
 
       - name: Commit and push changes
         env:
-          ISSUE_TITLE: ${{ github.event.issue.title || inputs.issue_title }}
-          ISSUE_AUTHOR: ${{ github.event.issue.user.login || inputs.issue_author || github.actor }}
+          ISSUE_TITLE: ${{ github.event.issue.title || inputs.issue_title || 'Chess: manual run' }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login || inputs.issue_author || 'manual-run' }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
