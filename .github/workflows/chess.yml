@@ -3,38 +3,45 @@ name: chess
 on:
   issues:
     types: [opened]
+  workflow_dispatch:
+    inputs:
+      issue_title:
+        description: 'Issue title to use for the chess move'
+        required: false
+        default: 'Chess: manual run'
+      issue_author:
+        description: 'Author name to use for the generated commit'
+        required: false
+        default: '${{ github.actor }}'
 
 jobs:
   move:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: startsWith(github.event.issue.title, 'Chess:')
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.issue.title, 'Chess:')
 
     steps:
       - uses: actions/checkout@v3
 
-      # Set up a Python 3.10 (64-bit) instance
       - name: Setting up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
           architecture: "x64"
 
-      # Use pip to install the dependencies and then run the script
       - name: Play chess
         env:
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_NUMBER: ${{ github.event.issue.number || github.run_number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: |
           pip install -r requirements.txt
           python main.py
 
-      # Create new commit with the changed files and push it to GitHub
       - name: Commit and push changes
         env:
-          ISSUE_TITLE: ${{ github.event.issue.title }}
-          ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+          ISSUE_TITLE: ${{ github.event.issue.title || inputs.issue_title }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login || inputs.issue_author || github.actor }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -46,7 +53,7 @@ jobs:
         run: |
           npm i
           node main.js
-      
+
       - name: Commit changes again
         run: |
           git config --global user.name "Panda"
