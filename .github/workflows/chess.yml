@@ -40,13 +40,15 @@ jobs:
 
       - name: Commit and push changes
         env:
-          ISSUE_TITLE: ${{ github.event.issue.title || inputs.issue_title || 'Chess: manual run' }}
-          ISSUE_AUTHOR: ${{ github.event.issue.user.login || inputs.issue_author || 'manual-run' }}
+          ISSUE_TITLE: ${{ github.event.issue.title || inputs.issue_title }}
+          ISSUE_AUTHOR: ${{ github.event.issue.user.login || inputs.issue_author }}
         run: |
+          TITLE="${ISSUE_TITLE:-Chess: manual run}"
+          AUTHOR="${ISSUE_AUTHOR:-manual-run}"
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git commit -m "${ISSUE_TITLE} by ${ISSUE_AUTHOR}"
+          git commit -m "${TITLE} by ${AUTHOR}"
           git push
 
       - name: Chess board generation
