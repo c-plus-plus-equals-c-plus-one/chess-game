@@ -1,2 +1,1 @@
-
-{}
+{'@c-plus-plus-equals-c-plus-one': 1}
