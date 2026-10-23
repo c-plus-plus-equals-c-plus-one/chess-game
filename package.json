@@ -1,7 +1,7 @@
 {
   "name": "md-to-svg",
   "version": "1.0.0",
-  "description": "" chess workflow",
+  "description": "chess workflow",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
