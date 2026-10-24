@@ -1,3 +1,4 @@
+d2d3: @0xKann
 d7d5: @samuraii77
 b2b4: @c-plus-plus-equals-c-plus-one
 Start game: @c-plus-plus-equals-c-plus-one
